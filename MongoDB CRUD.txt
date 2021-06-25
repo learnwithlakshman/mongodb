@@ -1,0 +1,96 @@
+Installation of MongoDB
+
+The executable file needs to be downloaded from:
+
+https://www.mongodb.com/download-center?jmp=nav#community
+
+Note: During installation of MongoDB, one of the wizards has a compass installation check box, please uncheck the same, and continue the installation process by clicking on “Next”.
+
+·         Once installation is completed, create the directory “data/db” in the "C" drive.
+
+·         Copy the MongoDB installation directory path (which looks like C:\Program Files\MongoDB\Server\3.6\bin) and add it to the environment variable of the system. 
+     To Run mongo client open command prompt and type mongo 
+
+
+·         To verify the installation:
+                 - Open the command prompt
+                            Type the command mongod. If a message "Waiting for connections on port 27017" is                  displayed on the last line, it indicates the successful installation of MongoDB.
+
+Installation of RoboMongo
+	
+	Download the executable from the following link:
+        		https://robomongo.org/download    
+
+
+Just follow the instructions of the installation wizard to complete installation of RoboMongo.
+
+
+
+
+Working with MongoDB
+
+The example given below covers all the basic (CRUD) operations in MongoDB.
+
+Connect to MongoDB (by using mongo shell)
+Create database with name (ems)   - use ems;
+
+Insert the following data into "faculty" collection (Use insertMany())
+
+
+
+db.faculty.insertMany([
+            { "name":"Krish", "age":35,"gender":"M","exp":10,subjects:["DS","C","OS"],"type":"Full Time","qualification":"M.Tech" },
+            { "name":"Manoj", "age":38,"gender":"M","exp":12,subjects:["JAVA","DBMS"],"type":"Full Time", "qualification":"Ph.D"},
+            { "name":"Anush", "age":32,"gender":"F","exp":8,subjects:["C","CPP"],"type":"Part Time","qualification":"M.Tech" },
+            { "name":"Suresh", "age":40,"gender":"M","exp":9,subjects:["JAVA","DBMS","NETWORKING"],"type":"Full Time", "qualification":"Ph.D"},
+            { "name":"Rajesh", "age":35,"gender":"M","exp":7,subjects:["DS","C","OS"],"type":"Full Time","qualification":"M.Tech" },
+            { "name":"Mani", "age":38,"gender":"F","exp":10,subjects:["JAVA","DBMS","OS"],"type":"Part Time", "qualification":"Ph.D"},
+            { "name":"Sivani", "age":32,"gender":"F","exp":8,subjects:["C","CPP","MATHS"],"type":"Part Time","qualification":"M.Tech" },
+            { "name":"Nagesh", "age":39,"gender":"M","exp":11,subjects:["JAVA","DBMS","NETWORKING"],"type":"Full Time", "qualification":"Ph.D"},
+            { "name":"Nagesh", "age":35,"gender":"M","exp":9,subjects:["JAVA",".Net","NETWORKING"],"type":"Full Time", "qualification":"Ph.D"},
+            { "name":"Latha", "age":40,"gender":"F","exp":13,subjects:["MATHS"],"type":"Full Time", "qualification":"Ph.D"}
+]);
+
+
+Write the following queries:
+
+
+1. Get the details of all the faculty.
+2. Get the count of all faculty members. 
+3. Get all the faculty members whose qualification is “Ph.D”.
+4. Get all the faculty members whose experience is between 8 to 12 years.
+5. Get all the faculty members who teach “MATHS” or “NETWORKING”.
+6. Get all the faculty members who teach “MATHS” and whose age is more than 30 years and qualification must be “Ph.D”.
+7. Get all the faculty members who are working part-time or who teach “JAVA”.
+8. Add the following new faculty members:
+      { "name":"Suresh Babu", "age":55,"gender":"M","exp":25,subjects:["MATHS","DE"],"type":"Full Time", "qualification":"Ph.D"}
+
+db.faculty.insert(
+      { "name":"Suresh Babu", "age":55,"gender":"M","exp":25,subjects:["MATHS","DE"],"type":"Full Time", "qualification":"Ph.D"}
+       );
+9. Update the data of all faculty members by incrementing their age and exp by one year.
+10. Update the faculty “Sivani” with the following data: update qualification to “Ph.D” and type to “Full Time”.
+11. Update all faculty members who are teaching “MATHS” such that they should now also teach “PSK”.
+12. Delete all faculty members whose age is more than 55 years.
+13. Get only the name and qualification of all faculty members. 
+14. Get the name, qualification and exp of all faculty members and display the same in ascending order of exp.
+15. Sort the faculty details by their age (descending order) and get the details of the first five faculty members only. 
+
+Solutions: 
+
+
+1. db.faculty.find().pretty()
+2. db.faculty.count()
+3. db.faculty.find({qualification:'Ph.D'}).pretty()
+4. db.faculty.find({$and:[{exp:{$gt:7}},{exp:{$lt:13}}]}).pretty()
+5. db.faculty.find({subjects:{$in:["MATHS","NETWORKING"]}}).pretty()
+6. db.faculty.find({$and:[{subjects:'MATHS'},{age:{$gt:29}},{qualification:'Ph.D'}]}).pretty()
+7. db.faculty.find({$or:[{type:"Part Time"},{subjects:"JAVA"}]}).pretty()
+8. db.faculty.insert( {"name" : "Suresh Babu", age":55, "gender":"M", "exp":25, subjects:["MATHS","DE"],"type":"Full Time", "qualification":"Ph.D"})
+9. db.faculty.updateMany({},{$inc:{age:1,exp:1}})
+10. db.faculty.updateMany({name:"Sivani"},{$set:{qualification:"Ph.D",type:"Full Time"}})
+11. db.faculty.updateMany({subjects:"MATHS"},{$push:{subjects:"PSK"}})
+12. db.faculty.deleteMany({age:{$gt:54}})
+13. db.faculty.find({},{name:1,_id:0,qualification:1});
+14. db.faculty.find({},{name:1,_id:0,qualification:1,exp:1}).sort({exp:-1}).pretty()
+15. db.faculty.find({}).sort({age:-1}).limit(5).pretty()

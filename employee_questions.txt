@@ -1,0 +1,7 @@
+# Get name,salary, country information
+# Get max salary
+# Increment salary of the employees who are getting < 2000
+# Get count of employees by country
+# Get count of employees by gender
+# Get country wise total salary and employee count
+# Get name,salary, yearly_salary of each employee
